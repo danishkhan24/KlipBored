@@ -39,14 +39,14 @@ const FileUpload = ({ clipboardKey }) => {
         }
     };
 
-    return (
-        <div className="container mt-4">
-            <h3>Upload File</h3>
-            <input type="file" onChange={onFileChange} className="form-control" />
-            <button onClick={onUpload} className="btn btn-primary mt-2">Upload</button>
-            <p>{message}</p>
-        </div>
-    );
+    // return (
+    //     <div className="container mt-4">
+    //         <h3>Upload File</h3>
+    //         <input type="file" onChange={onFileChange} className="form-control" />
+    //         <button onClick={onUpload} className="btn btn-primary mt-2">Upload</button>
+    //         <p>{message}</p>
+    //     </div>
+    // );
 };
 
 export default FileUpload;
