@@ -15,6 +15,7 @@
     "@aws-sdk/lib-dynamodb": "^3.624.0",
     "@aws-sdk/s3-request-presigner": "^3.627.0",
     "axios": "^1.7.3",
+    "bootstrap": "^5.3.3",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "multer": "^1.4.5-lts.1"

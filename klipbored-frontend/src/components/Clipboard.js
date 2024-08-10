@@ -13,6 +13,7 @@ const Clipboard = () => {
             const response = await axios.post('/api/clipboard', { data, files: [] });
             setMessage('Clipboard data saved successfully!');
             setKey(response.data); // Set the key returned by the server
+            setData(''); // Empty the input data textbox
         } catch (error) {
             setMessage('Error saving clipboard data.');
             console.error(error);
@@ -31,7 +32,7 @@ const Clipboard = () => {
     };
 
     return (
-        <div>
+        <div className="container">
             <h3>Clipboard</h3>
             <input
                 type="text"
@@ -43,12 +44,12 @@ const Clipboard = () => {
                 placeholder="Enter clipboard data"
                 value={data}
                 onChange={(e) => setData(e.target.value)}
-            ></textarea>        
-            <button onClick={onSave}>Save</button>
-            <button onClick={onRetrieve}>Retrieve</button>
+            ></textarea>
+            <button onClick={onSave} className="btn btn-primary">Save</button>
+            <button onClick={onRetrieve} className="btn btn-secondary">Retrieve</button>
             <p>{message}</p>
             {clipboardData && (
-                <div>
+                <div className="mt-4">
                     <h4>Retrieved Data</h4>
                     <p>{clipboardData.data}</p>
                     {clipboardData.files && clipboardData.files.length > 0 && (
