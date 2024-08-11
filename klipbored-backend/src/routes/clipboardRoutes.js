@@ -14,7 +14,6 @@ router.post('/clipboard', async (req, res) => {
 
 router.get('/clipboard/:key', async (req, res) => {
     const { key } = req.params;
-    console.log("Get clipboard method called");
     try {
         const data = await getClipboardData(key);
         if (data) {

@@ -7,7 +7,7 @@ function App() {
 
     return (
         <div className="App">
-            <h1>Klipbored</h1>
+            <h1 style={{color:'white'}}>Klipbored</h1>
             <Clipboard />
             <FileUpload clipboardKey={clipboardKey} />
         </div>
