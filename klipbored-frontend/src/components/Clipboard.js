@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 const Clipboard = () => {
     const [data, setData] = useState('');
@@ -7,10 +8,10 @@ const Clipboard = () => {
     const [clipboardData, setClipboardData] = useState(null);
     const [key, setKey] = useState('');
 
-
     const onSave = async () => {
         try {
-            const response = await axios.post('/api/clipboard', { data, files: [] });
+            console.log(backendUrl);
+            const response = await axios.post(`${backendUrl}/api/clipboard`, { data, files: [] });
             setMessage('Clipboard data saved successfully!');
             setKey(response.data); // Set the key returned by the server
             setData(''); // Empty the input data textbox
@@ -22,7 +23,7 @@ const Clipboard = () => {
 
     const onRetrieve = async () => {
         try {
-            const response = await axios.get(`/api/clipboard/${key}`);
+            const response = await axios.get(`${backendUrl}/api/clipboard/${key}`);
             setClipboardData(response.data);
             setMessage('Clipboard data retrieved successfully.');
         } catch (error) {
@@ -51,7 +52,7 @@ const Clipboard = () => {
             {clipboardData && (
                 <div className="mt-4">
                     <h4>Retrieved Data</h4>
-                    <p>{clipboardData.data}</p>
+                    <p style={{fontSize: '18px'}}>{clipboardData.data}</p>
                     {clipboardData.files && clipboardData.files.length > 0 && (
                         <div>
                             <h5>Files:</h5>

@@ -34,6 +34,8 @@ const saveClipboardData = async (data, files) => {
         key = generateShortKey(4);  // Generate a 4-digit key
     } while (!isKeyUnique(key));  // Ensure the key is unique
 
+    console.log("Generated Key: ", key);
+
     const command = new PutCommand({
         TableName: process.env.DYNAMODB_TABLE_NAME,
         Item: {

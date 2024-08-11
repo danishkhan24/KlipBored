@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./klipbored-frontend
+      dockerfile: Dockerfile
+      args:
+        - REACT_APP_BACKEND_URL=http://localhost:5000
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    environment:
+      - REACT_APP_BACKEND_URL=http://localhost:5000
+    networks:
+      - klipbored-network
+
+  backend:
+    build:
+      context: ./klipbored-backend
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+    networks:
+      - klipbored-network
+
+networks:
+  klipbored-network:
+    driver: bridge

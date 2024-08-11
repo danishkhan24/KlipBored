@@ -4,8 +4,8 @@ const { saveClipboardData, getClipboardData } = require('../services/clipboardSe
 
 router.post('/clipboard', async (req, res) => {
     const { data, files } = req.body;
+    console.log("Save clipboard method called");
     try {
-        // console.log("Last name", lastName);
         const key = await saveClipboardData(data, files);
         res.status(200).json(key); // send the generated key to user
     } catch (error) {
@@ -15,6 +15,7 @@ router.post('/clipboard', async (req, res) => {
 
 router.get('/clipboard/:key', async (req, res) => {
     const { key } = req.params;
+    console.log("Get clipboard method called");
     try {
         const data = await getClipboardData(key);
         if (data) {

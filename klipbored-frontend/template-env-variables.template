@@ -1,0 +1,3 @@
+map $REACT_APP_BACKEND_URL {
+  default "$REACT_APP_BACKEND_URL";
+}
