@@ -10,7 +10,6 @@ const Clipboard = () => {
 
     const onSave = async () => {
         try {
-            console.log(backendUrl);
             const response = await axios.post(`${backendUrl}/api/clipboard`, { data, files: [] });
             setMessage('Clipboard data saved successfully!');
             setKey(response.data); // Set the key returned by the server
