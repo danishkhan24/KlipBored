@@ -31,13 +31,13 @@ jobs:
     # Build and push the frontend Docker image
     - name: Build and Push Frontend Docker Image
       run: |
-        docker build -t ${{ secrets.FRONTEND_REPO }}:latest ./frontend
+        docker build -t ${{ secrets.FRONTEND_REPO }}:latest ./klipbored-frontend
         docker push ${{ secrets.FRONTEND_REPO }}:latest
 
     # Build and push the backend Docker image
     - name: Build and Push Backend Docker Image
       run: |
-        docker build -t ${{ secrets.BACKEND_REPO }}:latest ./backend
+        docker build -t ${{ secrets.BACKEND_REPO }}:latest ./klipbored-backend
         docker push ${{ secrets.BACKEND_REPO }}:latest
 
   deploy:
