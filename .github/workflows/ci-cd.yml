@@ -41,6 +41,7 @@ jobs:
         docker push ${{ secrets.BACKEND_REPO }}:latest
 
   deploy:
+    runs-on: ubuntu-latest
 
     steps:
     # Update kubeconfig to access the EKS cluster
