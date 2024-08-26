@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-const backendUrl = process.env.REACT_APP_BACKEND_URL;
+const backendUrl = "https://klipbored.com";
 
 const Clipboard = () => {
     const [data, setData] = useState('');

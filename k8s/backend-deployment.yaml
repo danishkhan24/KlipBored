@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   name: backend-deployment
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: backend
@@ -24,11 +24,17 @@ apiVersion: v1
 kind: Service
 metadata:
   name: backend-service
+  namespace: default
+  # annotations:
+  #   service.beta.kubernetes.io/aws-load-balancer-type: external
+  #   service.beta.kubernetes.io/aws-load-balancer-subnets: "subnet-03cb05d4a044be108"
+  #   service.beta.kubernetes.io/aws-load-balancer-security-groups: "sg-0e313a22fddea4099"  # Replace with your security group ID
+  #   service.beta.kubernetes.io/aws-load-balancer-eip-allocations: "eipalloc-0a0b470a2b5888c30" # Elastic IP allocation ID
 spec:
   selector:
     app: backend
   ports:
     - protocol: TCP
-      port: 5000
+      port: 80
       targetPort: 5000
   type: LoadBalancer
