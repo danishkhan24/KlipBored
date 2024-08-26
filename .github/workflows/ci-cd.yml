@@ -1,0 +1,61 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_and_push:
+    runs-on: ubuntu-latest
+
+    env:
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      DYNAMODB_TABLE_NAME: ${{ secrets.DYNAMODB_TABLE_NAME }}
+
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Log in to Amazon ECR
+      uses: aws-actions/amazon-ecr-login@v1
+      with:
+        region: ${{ secrets.AWS_REGION }}
+
+    # Build and push the frontend Docker image
+    - name: Build and Push Frontend Docker Image
+      run: |
+        docker build -t ${{ secrets.FRONTEND_REPO }}:latest ./frontend
+        docker push ${{ secrets.FRONTEND_REPO }}:latest
+
+    # Build and push the backend Docker image
+    - name: Build and Push Backend Docker Image
+      run: |
+        docker build -t ${{ secrets.BACKEND_REPO }}:latest ./backend
+        docker push ${{ secrets.BACKEND_REPO }}:latest
+
+  deploy:
+
+    steps:
+    # Update kubeconfig to access the EKS cluster
+    - name: Update Kubeconfig
+      run: |
+        aws eks update-kubeconfig --name ${{ secrets.EKS_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }}
+
+    # Deploy the frontend to EKS
+    - name: Deploy Frontend to EKS
+      run: |
+        kubectl set image -f ./k8s/frontend-deployment.yaml frontend=${{ secrets.FRONTEND_REPO }}:latest
+        kubectl apply -f ./k8s/frontend-deployment.yaml
+
+    # Deploy the backend to EKS
+    - name: Deploy Backend to EKS
+      run: |
+        kubectl set image -f ./k8s/backend-deployment.yaml backend=${{ secrets.BACKEND_REPO }}:latest
+        kubectl apply -f ./k8s/backend-deployment.yaml

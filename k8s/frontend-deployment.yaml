@@ -3,8 +3,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: frontend-deployment
+  namespace: default  # Make sure this matches your Fargate profile namespace
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: frontend
@@ -16,9 +17,6 @@ spec:
       containers:
       - name: frontend
         image: 883463338978.dkr.ecr.eu-west-2.amazonaws.com/klipbored-frontend:latest
-        env:
-        - name: REACT_APP_BACKEND_URL
-          value: backend-service
         ports:
         - containerPort: 80
 
@@ -27,11 +25,12 @@ apiVersion: v1
 kind: Service
 metadata:
   name: frontend-service
+  namespace: default
 spec:
   selector:
-    app: frontend
+    app: frontend  # This should match the labels on your application pods
   ports:
     - protocol: TCP
       port: 80
       targetPort: 80
-  type: LoadBalancer
+  type: ClusterIP  # The type can be ClusterIP as the ALB will handle external access

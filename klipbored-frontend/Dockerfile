@@ -14,8 +14,8 @@ RUN npm install
 COPY . .
 
 # Build the app for production with environment variables
-ARG REACT_APP_BACKEND_URL
-ENV REACT_APP_BACKEND_URL=${REACT_APP_BACKEND_URL}
+# ARG REACT_APP_BACKEND_URL
+# ENV REACT_APP_BACKEND_URL=${REACT_APP_BACKEND_URL}
 RUN npm run build
 
 # Use Nginx to serve the build files
@@ -29,6 +29,3 @@ EXPOSE 80
 
 # Start Nginx server
 CMD ["nginx", "-g", "daemon off;"]
-
-# # Start the development server
-# CMD ["npm", "start"]

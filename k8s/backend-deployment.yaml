@@ -18,6 +18,11 @@ spec:
         image: 883463338978.dkr.ecr.eu-west-2.amazonaws.com/klipbored-backend:latest
         ports:
         - containerPort: 5000
+      tolerations:
+      - key: "eks.amazonaws.com/compute-type"
+        operator: "Equal"
+        value: "fargate"
+        effect: "NoSchedule"
 
 ---
 apiVersion: v1
@@ -25,16 +30,11 @@ kind: Service
 metadata:
   name: backend-service
   namespace: default
-  # annotations:
-  #   service.beta.kubernetes.io/aws-load-balancer-type: external
-  #   service.beta.kubernetes.io/aws-load-balancer-subnets: "subnet-03cb05d4a044be108"
-  #   service.beta.kubernetes.io/aws-load-balancer-security-groups: "sg-0e313a22fddea4099"  # Replace with your security group ID
-  #   service.beta.kubernetes.io/aws-load-balancer-eip-allocations: "eipalloc-0a0b470a2b5888c30" # Elastic IP allocation ID
 spec:
   selector:
-    app: backend
+    app: backend  # Ensure this label matches your backend pods
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 5000
-  type: LoadBalancer
+      targetPort: 5000 # backend container listener port
+  type: ClusterIP
