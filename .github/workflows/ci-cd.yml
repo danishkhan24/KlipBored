@@ -15,7 +15,6 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       DYNAMODB_TABLE_NAME: ${{ secrets.DYNAMODB_TABLE_NAME }}
 
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -43,6 +42,11 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    env:
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  
     steps:
     # Update kubeconfig to access the EKS cluster
     - name: Update Kubeconfig
