@@ -63,7 +63,7 @@ const Clipboard = () => {
             {clipboardData && (
                 <div className="mt-4">
                     <h4>Retrieved Data</h4>
-                    <p style={{ fontSize: '18px' }}>{clipboardData.data}</p>
+                    <p style={{ fontSize: '20px' }}>{clipboardData.data}</p>
                     {clipboardData.files && clipboardData.files.length > 0 && (
                         <div>
                             <h5>Files:</h5>
