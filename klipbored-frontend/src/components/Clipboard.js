@@ -39,19 +39,31 @@ const Clipboard = () => {
                 placeholder="Enter Your Unique Key to fetch stored data"
                 value={key}
                 onChange={(e) => setKey(e.target.value)}
+                className="form-control"
             />
             <textarea
                 placeholder="Enter clipboard data to store"
                 value={data}
                 onChange={(e) => setData(e.target.value)}
+                className="form-control"
             ></textarea>
-            <button onClick={onSave} className="btn btn-primary">Save</button>
-            <button onClick={onRetrieve} className="btn btn-secondary">Retrieve</button>
+            <button
+                onClick={onSave}
+                className="btn btn-primary button-group"
+            >
+                Save
+            </button>
+            <button
+                onClick={onRetrieve}
+                className="btn btn-secondary button-group"
+            >
+                Retrieve
+            </button>
             <p>{message}</p>
             {clipboardData && (
                 <div className="mt-4">
                     <h4>Retrieved Data</h4>
-                    <p style={{fontSize: '18px'}}>{clipboardData.data}</p>
+                    <p style={{ fontSize: '18px' }}>{clipboardData.data}</p>
                     {clipboardData.files && clipboardData.files.length > 0 && (
                         <div>
                             <h5>Files:</h5>
@@ -69,7 +81,7 @@ const Clipboard = () => {
                 </div>
             )}
         </div>
-    );
+    );    
 };
 
 export default Clipboard;

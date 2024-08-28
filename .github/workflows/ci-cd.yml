@@ -4,55 +4,90 @@ on:
   push:
     branches:
       - master
+    paths:
+      - 'klipbored-frontend/**'
+      - 'klipbored-backend/**'
+  pull_request:
+    branches:
+      - master
+    paths:
+      - 'klipbored-frontend/**'
+      - 'klipbored-backend/**'
 
 jobs:
-  build_and_push:
+  build_and_push_frontend:
+    if: contains(github.event.head_commit.message, 'klipbored-frontend') || github.event_name == 'pull_request'
     runs-on: ubuntu-latest
 
     env:
       AWS_REGION: ${{ secrets.AWS_REGION }}
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      DYNAMODB_TABLE_NAME: ${{ secrets.DYNAMODB_TABLE_NAME }}
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
 
-    - name: Log in to Amazon ECR
-      uses: aws-actions/amazon-ecr-login@v1
-      with:
-        region: ${{ secrets.AWS_REGION }}
+      - name: Log in to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          region: ${{ secrets.AWS_REGION }}
 
-    # Build and push the frontend Docker image
-    - name: Build and Push Frontend Docker Image
-      run: |
-        docker build -t ${{ secrets.FRONTEND_REPO }}:latest ./klipbored-frontend
-        docker push ${{ secrets.FRONTEND_REPO }}:latest
+      - name: Build and Push Frontend Docker Image
+        run: |
+          docker build -t ${{ secrets.FRONTEND_REPO }}:latest ./klipbored-frontend
+          docker push ${{ secrets.FRONTEND_REPO }}:latest
 
-    # Build and push the backend Docker image
-    - name: Build and Push Backend Docker Image
-      run: |
-        docker build -t ${{ secrets.BACKEND_REPO }}:latest ./klipbored-backend
-        docker push ${{ secrets.BACKEND_REPO }}:latest
+  build_and_push_backend:
+    if: contains(github.event.head_commit.message, 'klipbored-backend') || github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
 
-    - name: Checkout code
-      uses: actions/checkout@v2
-  
-    # Update kubeconfig to access the EKS cluster
-    - name: Update Kubeconfig
-      run: |
-        aws eks update-kubeconfig --name ${{ secrets.EKS_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }}
+    env:
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-    # Deploy the frontend to EKS
-    - name: Deploy Frontend to EKS
-      run: |
-        kubectl apply -f ./k8s/frontend-deployment.yaml
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    # Deploy the backend to EKS
-    - name: Deploy Backend to EKS
-      run: |
-        kubectl apply -f ./k8s/backend-deployment.yaml
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log in to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          region: ${{ secrets.AWS_REGION }}
+
+      - name: Build and Push Backend Docker Image
+        run: |
+          docker build -t ${{ secrets.BACKEND_REPO }}:latest ./klipbored-backend
+          docker push ${{ secrets.BACKEND_REPO }}:latest
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [build_and_push_frontend, build_and_push_backend]
+
+    env:
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Update Kubeconfig
+        run: |
+          aws eks update-kubeconfig --name ${{ secrets.EKS_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }}
+
+      - name: Deploy Frontend to EKS
+        run: |
+          kubectl apply -f ./k8s/frontend-deployment.yaml
+
+      - name: Deploy Backend to EKS
+        run: |
+          kubectl apply -f ./k8s/backend-deployment.yaml
