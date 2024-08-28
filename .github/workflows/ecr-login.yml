@@ -2,10 +2,6 @@ name: ECR Login
 
 on:
   workflow_call:
-    secrets:
-      region:
-        description: 'AWS Region'
-        required: true
 
 jobs:
   login:
