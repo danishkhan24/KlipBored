@@ -2,11 +2,10 @@ name: ECR Login
 
 on:
   workflow_call:
-    inputs:
+    secrets:
       region:
         description: 'AWS Region'
         required: true
-        type: string
 
 jobs:
   login:
@@ -15,4 +14,4 @@ jobs:
       - name: Log in to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
         with:
-          region: ${{ inputs.region }}
+          region: ${{ secrets.region }}
