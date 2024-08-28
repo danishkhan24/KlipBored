@@ -32,28 +32,28 @@ jobs:
         with:
           region: ${{ secrets.AWS_REGION }}
 
-      # Caching builds
-      - name: Cache Docker layers for Frontend
-        uses: actions/cache@v2
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ hashFiles('klipbored-frontend/Dockerfile', 'klipbored-frontend/**') }}-${{ github.run_id }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
+      # # Caching builds
+      # - name: Cache Docker layers for Frontend
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: /tmp/.buildx-cache
+      #     key: ${{ runner.os }}-buildx-${{ hashFiles('klipbored-frontend/Dockerfile', 'klipbored-frontend/**') }}-${{ github.run_id }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-buildx-
   
       - name: Build and Push Frontend Docker Image
         run: |
           docker build -t ${{ secrets.FRONTEND_REPO }}:latest ./klipbored-frontend
           docker push ${{ secrets.FRONTEND_REPO }}:latest
 
-      # Caching builds
-      - name: Cache Docker layers for Backend
-        uses: actions/cache@v2
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ hashFiles('klipbored-backend/Dockerfile', 'klipbored-backend/**') }}-${{ github.run_id }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
+      # # Caching builds
+      # - name: Cache Docker layers for Backend
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: /tmp/.buildx-cache
+      #     key: ${{ runner.os }}-buildx-${{ hashFiles('klipbored-backend/Dockerfile', 'klipbored-backend/**') }}-${{ github.run_id }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-buildx-
 
       - name: Build and Push Backend Docker Image
         run: |
