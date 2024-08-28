@@ -36,12 +36,12 @@ const Clipboard = () => {
             <h3>Clipboard</h3>
             <input
                 type="text"
-                placeholder="Enter Your Unique Key"
+                placeholder="Enter Your Unique Key to fetch stored data"
                 value={key}
                 onChange={(e) => setKey(e.target.value)}
             />
             <textarea
-                placeholder="Enter clipboard data"
+                placeholder="Enter clipboard data to store"
                 value={data}
                 onChange={(e) => setData(e.target.value)}
             ></textarea>
