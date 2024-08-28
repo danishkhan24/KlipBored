@@ -31,7 +31,7 @@ jobs:
       - print
     uses: ./.github/workflows/ecr-login.yml
     with:
-      AWS_REGION: ${{ needs.print.outputs.AWS_REGION }}
+      region: ${{ needs.print.outputs.AWS_REGION }}
 
   build_and_push_frontend:
     runs-on: ubuntu-latest
