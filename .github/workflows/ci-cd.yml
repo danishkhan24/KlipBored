@@ -15,7 +15,7 @@ env:
 
 jobs:
 
-  print:
+  ECR_Region:
     runs-on: ubuntu-latest
     outputs:
       AWS_REGION: ${{ env.AWS_REGION }}
