@@ -50,11 +50,9 @@ jobs:
     # Deploy the frontend to EKS
     - name: Deploy Frontend to EKS
       run: |
-        kubectl set image -f ./k8s/frontend-deployment.yaml frontend=${{ secrets.FRONTEND_REPO }}:latest
         kubectl apply -f ./k8s/frontend-deployment.yaml
 
     # Deploy the backend to EKS
     - name: Deploy Backend to EKS
       run: |
-        kubectl set image -f ./k8s/backend-deployment.yaml backend=${{ secrets.BACKEND_REPO }}:latest
         kubectl apply -f ./k8s/backend-deployment.yaml
