@@ -30,7 +30,7 @@ jobs:
       - name: Log in to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
         with:
-          region: ${{ secrets.AWS_REGION }}
+          region: ${{ env.AWS_REGION }}
 
       # Caching builds
       - name: Cache Docker layers for Frontend
@@ -40,20 +40,8 @@ jobs:
           key: ${{ runner.os }}-buildx-${{ hashFiles('klipbored-frontend/Dockerfile', 'klipbored-frontend/**') }}-${{ github.run_id }}
           restore-keys: |
             ${{ runner.os }}-buildx-
-
-      - name: Check for changes in frontend
-        id: check_frontend_changes
-        run: |
-          if git diff --name-only HEAD^ HEAD | grep -q '^klipbored-frontend/'; then
-            echo "frontend_changed=true" >> $GITHUB_ENV
-            echo "::set-output name=frontend_changed::true"
-          else
-            echo "frontend_changed=false" >> $GITHUB_ENV
-            echo "::set-output name=frontend_changed::false"
-          fi
   
       - name: Build and Push Frontend Docker Image
-        if: steps.check_frontend_changes.outputs.frontend_changed == 'true'
         run: |
           docker build -t ${{ secrets.FRONTEND_REPO }}:latest ./klipbored-frontend
           docker push ${{ secrets.FRONTEND_REPO }}:latest
@@ -66,20 +54,9 @@ jobs:
           key: ${{ runner.os }}-buildx-${{ hashFiles('klipbored-backend/Dockerfile', 'klipbored-backend/**') }}-${{ github.run_id }}
           restore-keys: |
             ${{ runner.os }}-buildx-
-  
-      - name: Check for changes in backend
-        id: check_backend_changes
-        run: |
-          if git diff --name-only HEAD^ HEAD | grep -q '^klipbored-backend/'; then
-            echo "backend_changed=true" >> $GITHUB_ENV
-            echo "::set-output name=backend_changed::true"
-          else
-            echo "backend_changed=false" >> $GITHUB_ENV
-            echo "::set-output name=backend_changed::false"
-          fi
+
 
       - name: Build and Push Backend Docker Image
-        if: steps.check_backend_changes.outputs.backend_changed == 'true'
         run: |
           docker build -t ${{ secrets.BACKEND_REPO }}:latest ./klipbored-backend
           docker push ${{ secrets.BACKEND_REPO }}:latest
@@ -97,11 +74,9 @@ jobs:
           aws eks update-kubeconfig --name ${{ secrets.EKS_CLUSTER_NAME }} --region ${{ env.AWS_REGION }}
 
       - name: Deploy Frontend to EKS
-        if: needs.build_and_push_frontend.outputs.frontend_changed == 'true'
         run: |
           kubectl apply -f ./k8s/frontend-deployment.yaml
 
       - name: Deploy Backend to EKS
-        if: needs.build_and_push_backend.outputs.backend_changed == 'true'
         run: |
           kubectl apply -f ./k8s/backend-deployment.yaml
