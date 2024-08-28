@@ -28,7 +28,7 @@ jobs:
 
   ecr_login:
     needs:
-      - print
+      - ECR_Region
     uses: ./.github/workflows/ecr-login.yml
     with:
       region: ${{ needs.print.outputs.AWS_REGION }}
