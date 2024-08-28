@@ -24,7 +24,7 @@ jobs:
         id: step1
         run: |
           echo "AWS_REGION: $AWS_REGION"
-          echo "::set-output AWS_REGION=some_var::$AWS_REGION"
+          echo "::set-output name=AWS_REGION::$AWS_REGION"
 
   ecr_login:
     needs:
