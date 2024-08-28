@@ -18,19 +18,19 @@ jobs:
   ECR_Region:
     runs-on: ubuntu-latest
     outputs: 
-      AWS_REGION: ${{steps.step1.outputs.AWS_REGION}}
+      aws_region: ${{steps.step1.outputs.aws_region}}
     steps:
       - name: Print inputs passed to the reusable workflow
         id: step1
         run: |
-          echo "::set-output name=AWS_REGION::${{env.AWS_REGION}}"
-          echo "AWS_REGION: $AWS_REGION"
+          echo "::set-output name=aws_region::${{secrets.AWS_REGION}}"
+          echo "aws_region: $AWS_REGION"
 
   ecr_login:
     needs: ECR_Region
     uses: ./.github/workflows/ecr-login.yml
     with:
-      region: ${{ needs.ECR_Region.outputs.AWS_REGION }}
+      region: ${{ needs.ECR_Region.outputs.aws_region }}
 
   build_and_push_frontend:
     runs-on: ubuntu-latest
