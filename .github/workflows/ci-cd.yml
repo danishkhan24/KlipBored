@@ -15,10 +15,23 @@ env:
 
 jobs:
 
+  print:
+    runs-on: ubuntu-latest
+    outputs:
+      AWS_REGION: ${{ env.AWS_REGION }}
+    steps:
+      - name: Print inputs passed to the reusable workflow
+        id: step1
+        run: |
+          echo "AWS_REGION: $AWS_REGION"
+          echo "::set-output AWS_REGION=some_var::$AWS_REGION"
+
   ecr_login:
+    needs:
+      - print
     uses: ./.github/workflows/ecr-login.yml
-    secrets:
-      AWS_REGION: ${{ secrets.AWS_REGION }}
+    with:
+      AWS_REGION: ${{ needs.print.outputs.AWS_REGION }}
 
   build_and_push_frontend:
     runs-on: ubuntu-latest
