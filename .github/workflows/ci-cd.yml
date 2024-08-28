@@ -23,8 +23,8 @@ jobs:
       - name: Print inputs passed to the reusable workflow
         id: step1
         run: |
+          echo "::set-output name=AWS_REGION::${{env.AWS_REGION}}"
           echo "AWS_REGION: $AWS_REGION"
-          echo "::set-output name=AWS_REGION::$AWS_REGION"
 
   ecr_login:
     needs: ECR_Region
