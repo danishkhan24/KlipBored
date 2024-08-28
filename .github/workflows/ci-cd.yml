@@ -17,15 +17,14 @@ jobs:
 
   ECR_Region:
     runs-on: ubuntu-latest
-    outputs:
-      AWS_REGION: ${{ secrets.AWS_REGION }}
+    outputs: 
+      AWS_REGION: ${{steps.step1.outputs.AWS_REGION}}
     steps:
       - name: Print inputs passed to the reusable workflow
         id: step1
         run: |
           echo "AWS_REGION: $AWS_REGION"
           echo "::set-output name=AWS_REGION::$AWS_REGION"
-          echo "Region is $AWS_REGION"
 
   ecr_login:
     needs: ECR_Region
