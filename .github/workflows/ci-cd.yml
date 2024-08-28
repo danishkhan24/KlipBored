@@ -25,11 +25,10 @@ jobs:
         run: |
           echo "AWS_REGION: $AWS_REGION"
           echo "::set-output name=AWS_REGION::$AWS_REGION"
-          echo "Region is "
+          echo "Region is $AWS_REGION"
 
   ecr_login:
-    needs:
-      - ECR_Region
+    needs: ECR_Region
     uses: ./.github/workflows/ecr-login.yml
     with:
       region: ${{ needs.ECR_Region.outputs.AWS_REGION }}
