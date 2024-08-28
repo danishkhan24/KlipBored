@@ -4,15 +4,9 @@ on:
   push:
     branches:
       - master
-    paths:
-      - 'klipbored-frontend/**'
-      - 'klipbored-backend/**'
   pull_request:
     branches:
       - master
-    paths:
-      - 'klipbored-frontend/**'
-      - 'klipbored-backend/**'
 
 jobs:
   build_and_push_frontend:
