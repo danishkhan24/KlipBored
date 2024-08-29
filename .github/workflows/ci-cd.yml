@@ -35,11 +35,20 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-
 
+      # Caching builds
+      - name: Cache Docker layers for Backend
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ hashFiles('klipbored-backend/Dockerfile', 'klipbored-backend/**') }}-${{ github.run_id }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
       - name: Log in to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
         with:
           region: ${{ secrets.AWS_REGION }}
-
+          
       - name: Build and Push Frontend Docker Image
         run: |
           docker build -t ${{ secrets.FRONTEND_REPO }}:latest ./klipbored-frontend
