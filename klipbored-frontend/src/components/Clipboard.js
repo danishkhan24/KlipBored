@@ -42,7 +42,7 @@ const Clipboard = () => {
                 className="form-control"
             />
             <textarea
-                placeholder="Enter clipboard data to store"
+                placeholder="Enter some text here to store"
                 value={data}
                 onChange={(e) => setData(e.target.value)}
                 className="form-control"

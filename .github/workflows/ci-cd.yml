@@ -72,7 +72,9 @@ jobs:
       - name: Deploy Frontend to EKS
         run: |
           kubectl apply -f ./k8s/frontend-deployment.yaml
+          kubectl rollout restart deployment/frontend-deployment
 
       - name: Deploy Backend to EKS
         run: |
           kubectl apply -f ./k8s/backend-deployment.yaml
+          kubectl rollout restart deployment/backend-deployment
