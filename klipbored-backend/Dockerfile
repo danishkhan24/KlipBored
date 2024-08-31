@@ -1,10 +1,6 @@
 # Use the official Node.js 18 image as the base image
 FROM node:18 AS build
 
-# Declare the build argument
-ARG AWS_REGION
-ENV AWS_REGION=${AWS_REGION}
-
 # Set the working directory in the container
 WORKDIR /app
 
@@ -26,8 +22,14 @@ WORKDIR /app
 # Declare the build argument
 ARG AWS_REGION
 ARG DYNAMODB_TABLE_NAME
+ARG AWS_ACCESS_KEY_ID
+ARG AWS_SECRET_ACCESS_KEY
+
+# Set them as environment variables in the container
 ENV AWS_REGION=${AWS_REGION}
 ENV DYNAMODB_TABLE_NAME=${DYNAMODB_TABLE_NAME}
+ENV AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+ENV AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
 
 # Copy necessary files from the build stage
 COPY --from=build /app /app
