@@ -19,6 +19,9 @@ spec:
         image: 883463338978.dkr.ecr.eu-west-2.amazonaws.com/klipbored-frontend:latest
         ports:
         - containerPort: 80
+        env:
+          - name: BACKEND_SERVICE_URL
+            value: "http://backend-service"
 
 ---
 apiVersion: v1
