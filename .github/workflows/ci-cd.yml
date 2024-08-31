@@ -40,7 +40,7 @@ jobs:
 
       - name: Build and Push Frontend Docker Image
         run: |
-          docker build -t ${{ secrets.FRONTEND_REPO }}:latest ./klipbored-frontend
+          docker build --build-arg AWS_REGION=${{ secrets.AWS_REGION }} -t ${{ secrets.FRONTEND_REPO }}:latest ./klipbored-frontend
           docker push ${{ secrets.FRONTEND_REPO }}:latest
 
   build_and_push_backend:
