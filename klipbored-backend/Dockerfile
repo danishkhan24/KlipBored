@@ -25,7 +25,9 @@ WORKDIR /app
 
 # Declare the build argument
 ARG AWS_REGION
+ARG DYNAMODB_TABLE_NAME
 ENV AWS_REGION=${AWS_REGION}
+ENV DYNAMODB_TABLE_NAME=${DYNAMODB_TABLE_NAME}
 
 # Copy necessary files from the build stage
 COPY --from=build /app /app

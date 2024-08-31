@@ -12,6 +12,7 @@ env:
   AWS_REGION: ${{ secrets.AWS_REGION }}
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  DYNAMODB_TABLE_NAME: ${{ secrets.DYNAMODB_TABLE_NAME }}
 
 jobs:
   build_and_push_frontend:
@@ -40,7 +41,7 @@ jobs:
 
       - name: Build and Push Frontend Docker Image
         run: |
-          docker build --build-arg AWS_REGION=${{ secrets.AWS_REGION }} -t ${{ secrets.FRONTEND_REPO }}:latest ./klipbored-frontend
+          docker build -t ${{ secrets.FRONTEND_REPO }}:latest ./klipbored-frontend
           docker push ${{ secrets.FRONTEND_REPO }}:latest
 
   build_and_push_backend:
@@ -69,7 +70,10 @@ jobs:
 
       - name: Build and Push Backend Docker Image
         run: |
-          docker build -t ${{ secrets.BACKEND_REPO }}:latest ./klipbored-backend
+          docker build \
+          --build-arg AWS_REGION=${{ secrets.AWS_REGION }} \
+          --build-arg DYNAMODB_TABLE_NAME=${{ env.DYNAMODB_TABLE_NAME }} \
+          -t ${{ secrets.BACKEND_REPO }}:latest ./klipbored-backend
           docker push ${{ secrets.BACKEND_REPO }}:latest
 
   deploy:
