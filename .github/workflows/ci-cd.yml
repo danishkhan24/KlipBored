@@ -72,7 +72,7 @@ jobs:
         run: |
           docker build \
           --build-arg AWS_REGION=${{ secrets.AWS_REGION }} \
-          --build-arg DYNAMODB_TABLE_NAME=${{ env.DYNAMODB_TABLE_NAME }} \
+          --build-arg DYNAMODB_TABLE_NAME=${{ secrets.DYNAMODB_TABLE_NAME }} \
           -t ${{ secrets.BACKEND_REPO }}:latest ./klipbored-backend
           docker push ${{ secrets.BACKEND_REPO }}:latest
 
