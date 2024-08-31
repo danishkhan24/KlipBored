@@ -26,7 +26,6 @@ const isKeyUnique = async (key) => {
     }
 }
 
-
 const saveClipboardData = async (data, files) => {
 
     let key;
