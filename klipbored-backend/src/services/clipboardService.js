@@ -48,7 +48,8 @@ const saveClipboardData = async (data, files) => {
         return key;
     } catch (error) {
         console.error('Error saving clipboard data to DynamoDB:', error);
-        throw new Error('Error saving clipboard data');
+        return(error);
+        // throw new Error('Error saving clipboard data');
     }
 };
 

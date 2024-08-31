@@ -23,6 +23,10 @@ FROM node:alpine as main
 # Set the working directory in the container
 WORKDIR /app
 
+# Declare the build argument
+ARG AWS_REGION
+ENV AWS_REGION=${AWS_REGION}
+
 # Copy necessary files from the build stage
 COPY --from=build /app /app
 
