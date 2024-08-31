@@ -30,10 +30,6 @@ kind: Service
 metadata:
   name: backend-service
   namespace: default
-  annotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/path: "/metrics"
-    prometheus.io/port: "5000"
 spec:
   selector:
     app: backend  # Ensure this label matches your backend pods
